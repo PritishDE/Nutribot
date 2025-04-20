@@ -1,0 +1,126 @@
+name: nutrition_dataset
+tables:
+  - name: ALL_DIETS
+    base_table:
+      database: POC
+      schema: NUTRITION
+      table: ALL_DIETS
+    dimensions:
+      - name: DIET_TYPE
+        expr: DIET_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - paleo
+          - vegan
+          - keto
+        description: The type of diet being followed, with options including paleo (a diet focused on whole, unprocessed foods), vegan (a diet excluding all animal products), and keto (a high-fat, low-carbohydrate diet).
+        synonyms:
+          - diet_category
+          - eating_habit
+          - nutrition_type
+          - meal_plan
+          - food_type
+          - eating_style
+          - culinary_preference
+      - name: RECIPE_NAME
+        expr: RECIPE_NAME
+        data_type: VARCHAR(16777216)
+      - name: CUISINE_TYPE
+        expr: CUISINE_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - american
+          - south east asian
+          - mexican
+        description: The type of cuisine associated with a particular diet, such as American, South East Asian, or Mexican.
+        synonyms:
+          - cuisine
+          - food_type
+          - dish_category
+          - meal_style
+          - culinary_style
+          - food_genre
+          - cooking_style
+          - recipe_category
+    time_dimensions:
+      - name: EXTRACTION_DAY
+        expr: EXTRACTION_DAY
+        data_type: DATE
+        sample_values:
+          - '2022-10-16'
+        description: Date on which the diet data was extracted from the source system.
+        synonyms:
+          - extraction_date
+          - data_extraction_date
+          - data_collection_date
+          - data_retrieval_date
+          - data_capture_date
+      - name: EXTRACTION_TIME
+        expr: EXTRACTION_TIME
+        data_type: TIME(9)
+        sample_values:
+          - '17:20:09'
+          - '17:20:16'
+          - '17:20:29'
+        description: The time at which the diet data was extracted from the source system.
+        synonyms:
+          - extraction_hour
+          - extraction_timestamp
+          - data_retrieval_time
+          - data_extraction_timestamp
+          - data_retrieval_hour
+          - timestamp_of_extraction
+    facts:
+      - name: PROTEIN
+        expr: PROTEIN
+        data_type: FLOAT
+        sample_values:
+          - '5.22'
+          - '181.55'
+          - '30.91'
+        description: The amount of protein in a particular food item, measured in grams.
+        synonyms:
+          - protein_content
+          - protein_amount
+          - protein_percentage
+          - protein_level
+          - protein_value
+      - name: CARBS
+        expr: CARBS
+        data_type: FLOAT
+        sample_values:
+          - '1.29'
+          - '28.62'
+          - '302.59'
+        description: The total amount of carbohydrates in a particular diet, measured in grams.
+        synonyms:
+          - carbohydrates
+          - carbs_value
+          - carb_content
+          - carb_amount
+          - carb_level
+          - carb_percentage
+      - name: FAT
+        expr: FAT
+        data_type: FLOAT
+        sample_values:
+          - '3.2'
+          - '146.14'
+          - '96.76'
+        description: The amount of fat in a particular food item, measured in grams.
+        synonyms:
+          - lipid
+          - oil
+          - grease
+          - fatty_acid
+          - body_fat
+          - adipose_tissue
+          - lipid_content
+verified_queries:
+  - name: Highest Protein Content
+    question: What is the most protein-rich food?
+    use_as_onboarding_question: true
+    sql: SELECT recipe_name, protein FROM all_diets ORDER BY protein DESC NULLS LAST LIMIT 1
+    verified_by: Pritish Singh
+    verified_at: 1744140462
+custom_instructions: 'When responding to user queries that could return many results, limit the output to the top 5 most relevant entries based on the query context. Prioritize quality and clarity over quantity, and avoid listing all results unless explicitly requested by the user. '
